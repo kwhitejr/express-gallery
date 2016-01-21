@@ -9,7 +9,9 @@ module.exports = {
       photos.push({
         author: faker.name.firstName(),
         link: faker.image.image(),
-        description: "this is a " + faker.lorem.words()
+        description: "this is a " + faker.lorem.words(),
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
     }
     return queryInterface.bulkInsert('Photos', photos, {});
