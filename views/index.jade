@@ -5,8 +5,8 @@ head
   title Document
 body
   ol
-    each photo in data
-      li data.description
+    each photo in photos
+      li #{photo.description}
         ul
-          li data.link
-          li data.author
+          img(src= '#{photo.link}')
+          p by #{photo.author}
