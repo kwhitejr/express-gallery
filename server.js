@@ -10,8 +10,15 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.set('view engine', 'jade');
+app.set('views', 'views');
+
 app.get('/', function (req, res) {
-  var data =
+  var data = [
+    {author: 'Kevin', link: 'http://lorempixel.com/400/200/nature', description: 'This is a nature.'},
+    {author: 'Ben', link: 'http://lorempixel.com/400/200/transport', description: 'This is a transport.'},
+    {author: 'John', link: 'http://lorempixel.com/400/200/cats', description: 'This is a cats.'}
+  ];
   res.render('index', data);
 });
 
