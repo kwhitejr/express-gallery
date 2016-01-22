@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    title Document
-  body
-    p #{description}
-    img(src= '#{link}')
-    p by #{author}
-    a(href='localhost:3000/gallery/:id/edit') Edit Photo
-    a(href='localhost:3000/gallery/:id/delete') Delete Photo
+extends ./layout/layout.jade
+
+block title
+  title Gallery of 1
+
+block content
+  p #{description}
+  img(src= '#{link}')
+  p by #{author}
+  a(href='localhost:3000/gallery/:id/edit') Edit Photo
+  a(href='localhost:3000/gallery/:id/delete') Delete Photo

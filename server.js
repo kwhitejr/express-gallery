@@ -20,8 +20,11 @@ app.get('/', function (req, res) {
     });
 });
 
+app.get('/gallery/new', function (req, res) {
+  res.render('new', {});
+});
+
 app.get('/gallery/:id', function (req, res) {
-  console.log(req.params);
   Photo.find({where: {id: req.params.id}})
     .then(function (result) {
       var locals = {
@@ -32,6 +35,8 @@ app.get('/gallery/:id', function (req, res) {
       res.render('gallery', locals);
     });
 });
+
+
 
 db.sequelize
   .sync()
