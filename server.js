@@ -14,18 +14,24 @@ app.set('view engine', 'jade');
 app.set('views', 'views');
 
 app.get('/', function (req, res) {
-  var data = {
-    photos: [
-      {author: 'Kevin', link: 'http://lorempixel.com/400/200/nature', description: 'This is a nature.'},
-      {author: 'Ben', link: 'http://lorempixel.com/400/200/transport', description: 'This is a transport.'},
-      {author: 'John', link: 'http://lorempixel.com/400/200/cats', description: 'This is a cats.'},
-      {author: 'Fred', link: 'http://lorempixel.com/400/200/animals', description: 'This is a animals.'}
-    ]
-  };
-  res.render('index', data);
+  Photo.findAll()
+    .then(function (results) {
+      res.render('index', {photos: results});
+    });
 });
 
-
+app.get('/gallery/:id', function (req, res) {
+  console.log(req.params);
+  Photo.find({where: {id: req.params.id}})
+    .then(function (result) {
+      var locals = {
+        author:      result.author,
+        link:        result.link,
+        description: result.description
+      };
+      res.render('gallery', locals);
+    });
+});
 
 db.sequelize
   .sync()

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 html(lang="en")
-head
-  meta(charset="UTF-8")
-  title Document
-body
-  ol
-    each photo in photos
-      li #{photo.description}
-        ul
-          img(src= '#{photo.link}')
-          p by #{photo.author}
+  head
+    meta(charset="UTF-8")
+    title Document
+  body
+    ol
+      each photo in photos
+        li #{photo.description}
+          ul
+            img(src= '#{photo.link}')
+            p by #{photo.author}
