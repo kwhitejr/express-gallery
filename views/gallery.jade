@@ -4,8 +4,8 @@ html(lang="en")
     meta(charset="UTF-8")
     title Document
   body
-    ol
-      li #{description}
-        ul
-          img(src= '#{link}')
-          p by #{author}
+    p #{description}
+    img(src= '#{link}')
+    p by #{author}
+    a(href='localhost:3000/gallery/:id/edit') Edit Photo
+    a(href='localhost:3000/gallery/:id/delete') Delete Photo
