@@ -16,11 +16,34 @@ app.set('view engine', 'jade');
 app.set('views', 'views');
 
 app.put('/gallery/:id', function (req, res) {
-  res.render('put-form');
+  console.log(req.body);
+  Photo.update(
+    {
+      author:      req.body.author,
+      link:        req.body.link,
+      description: req.body.description,
+      updatedAt:   new Date()
+    },
+    {where:
+      {id: parseInt(req.params.id)}
+    }
+  )
+  .then(function (result) {
+    console.log(result[1]);
+    res.redirect('/gallery/'+req.params.id);
+  });
 });
 
 app.delete('/gallery/:id', function (req, res) {
-  res.render('delete-form');
+  Photo.destroy(
+    {
+      where:
+        {id: parseInt(req.params.id)}
+    }
+  )
+  .then(function () {
+      res.redirect('/');
+    });
 });
 
 
@@ -45,6 +68,19 @@ app.get('/gallery/:id', function (req, res) {
         description: result.description
       };
       res.render('gallery', locals);
+    });
+});
+
+app.get('/gallery/:id/edit', function (req, res) {
+  Photo.find({where: {id: req.params.id}})
+    .then(function (result) {
+      var locals = {
+        id:          result.id,
+        author:      result.author,
+        link:        result.link,
+        description: result.description
+      };
+      res.render('put-form', locals);
     });
 });
 

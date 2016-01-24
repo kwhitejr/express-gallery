@@ -8,7 +8,7 @@ block content
   p #{description}
   img(src= '#{link}')
   p by #{author}
-  form(method="POST", action="/gallery/#{id}?_method=PUT")
+  form(method="GET", action="/gallery/#{id}/edit")
     input(type="submit" value="edit photo #{id}")
   form(method="POST", action="/gallery/#{id}?_method=DELETE")
     input(type="submit" value="delete photo #{id}")
