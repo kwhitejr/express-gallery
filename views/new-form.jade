@@ -1,0 +1,15 @@
+extends ./layout/layout.jade
+
+block title
+  title New
+
+block content
+  h1 Upload New Photo
+  form(method="POST", action="/gallery", enctype="application/x-www/form-urlencoded")
+    input(type="text", name="author", placeholder="author's name")
+    br
+    input(type="text", name="link", placeholder="photo url")
+    br
+    input(type="text", name="description", placeholder="photo description")
+    br
+    input(type="submit")

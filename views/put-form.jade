@@ -1,0 +1,15 @@
+extends ./layout/layout.jade
+
+block title
+  title Put
+
+block contentblock content
+  h1 Put Request
+  form(method="POST", action="/gallery/#{id}?_method=PUT")
+    input(type="text", name="author", placeholder="edit author name")
+    br
+    input(type="text", name="photo", placeholder="edit photo url")
+    br
+    input(type="text", name="description", placeholder="edit photo description")
+    br
+    input(type="submit" name="submit put request")

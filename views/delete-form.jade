@@ -1,0 +1,9 @@
+extends ./layout/layout.jade
+
+block title
+  title Put
+
+block contentblock content
+  h1 Delete Request
+  form(method="POST", action="/gallery/#{id}?_method=DELETE")
+    input(type="submit" name="delete photo #{id}?")

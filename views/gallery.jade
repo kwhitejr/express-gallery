@@ -4,8 +4,11 @@ block title
   title Gallery of 1
 
 block content
+  h1 Gallery
   p #{description}
   img(src= '#{link}')
   p by #{author}
-  a(href='localhost:3000/gallery/:id/edit') Edit Photo
-  a(href='localhost:3000/gallery/:id/delete') Delete Photo
+  form(method="POST", action="/gallery/#{id}?_method=PUT")
+    input(type="submit" value="edit photo #{id}")
+  form(method="POST", action="/gallery/#{id}?_method=DELETE")
+    input(type="submit" value="delete photo #{id}")
