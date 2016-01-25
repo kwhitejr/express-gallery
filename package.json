@@ -27,6 +27,9 @@
     "sequelize": "^3.17.3"
   },
   "devDependencies": {
-    "faker": "^3.0.1"
+    "faker": "^3.0.1",
+    "gulp": "^3.9.0",
+    "gulp-connect": "^2.3.1",
+    "gulp-sass": "^2.1.1"
   }
 }

@@ -24,12 +24,12 @@ app.put('/gallery/:id', function (req, res) {
       description: req.body.description,
       updatedAt:   new Date()
     },
-    {where:
-      {id: parseInt(req.params.id)}
+    {
+      where: {id: req.params.id},
+      returning: true
     }
   )
   .then(function (result) {
-    console.log(result[1]);
     res.redirect('/gallery/'+req.params.id);
   });
 });
