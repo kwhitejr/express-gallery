@@ -9,29 +9,18 @@ var PathTo = {
   PublicCssFiles: './public/styles/*.css'
 };
 
+// this gulp just watches for changes to sass and updating the css. not running server
+
 gulp.task('watch-files', function (){
   gulp.watch(PathTo.SassFiles, ['compile-sass']);
-  gulp.watch("./public/**/*", ['html']);
 });
 
 gulp.task('compile-sass', function (){
   return gulp
-          .src(PathTo.SassFiles, ['compile-sass'])
+          .src(PathTo.SassFiles)
           .pipe(sass().on('error', sass.logError))
           .pipe(gulp.dest(PathTo.PublicCss));
 });
 
-gulp.task('html', function (){
-  return gulp.src('./public/index.html')
-    .pipe(connect.reload());
-});
 
-gulp.task('public-server', function (){
-  connect.server({
-    root: './public',
-    port: 8282,
-    livereload: true
-  });
-});
-
-gulp.task('default', ['compile-sass', 'watch-files', 'public-server']);
+gulp.task('default', ['compile-sass', 'watch-files']);

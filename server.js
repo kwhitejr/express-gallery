@@ -15,6 +15,9 @@ app.use(methodOverride('_method'));
 app.set('view engine', 'jade');
 app.set('views', 'views');
 
+// tells express where all the public files are located
+app.use(express.static('public'));
+
 app.put('/gallery/:id', function (req, res) {
   console.log(req.body);
   Photo.update(
