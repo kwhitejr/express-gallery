@@ -7,9 +7,9 @@ var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basi
 
 
 var db = require('./models');
-var PORT = 3000;
 var Photo = db.Photo;
-var CONFIG = require('config.json');
+var CONFIG = require('./config.json');
+var user = CONFIG.USER;
 
 var app = express();
 
@@ -24,9 +24,10 @@ app.use(express.static('public'));
 
 passport.use(new BasicStrategy(
   function(username, password, done) {
-    if ( !(username === CONFIG[0].username && password === CONFIG[0].password) ) {
+    if ( !(username === user.username && password === user.password) ) {
       return done(null, false);
     }
+    // the thing inside the done will be assigned to req.user
     return done(null, user);
   }
 ));
@@ -70,23 +71,24 @@ app.get('/', function (req, res) {
     });
 });
 
-app.get('/gallery/new', function (req, res) {
-  res.render('new-form', {});
-});
-
-app.get('/gallery/:id',
+app.get('/gallery/new',
   passport.authenticate('basic', {session: false}),
   function (req, res) {
-    Photo.find({where: {id: req.params.id}})
-      .then(function (result) {
-        var locals = {
-          id:          result.id,
-          author:      result.author,
-          link:        result.link,
-          description: result.description
-        };
-        res.render('gallery', locals);
-      });
+    res.render('new-form', {});
+  }
+);
+
+app.get('/gallery/:id', function (req, res) {
+  Photo.find({where: {id: req.params.id}})
+    .then(function (result) {
+      var locals = {
+        id:          result.id,
+        author:      result.author,
+        link:        result.link,
+        description: result.description
+      };
+      res.render('gallery', locals);
+    });
 });
 
 app.get('/gallery/:id/edit',
@@ -114,7 +116,7 @@ app.post('/gallery', function (req, res) {
 db.sequelize
   .sync()
   .then(function () {
-    app.listen(PORT, function () {
-      console.log('listening on ' + PORT);
+    app.listen(CONFIG.PORT, function () {
+      console.log('listening on ' + CONFIG.PORT);
     });
   });

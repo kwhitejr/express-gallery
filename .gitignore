@@ -30,4 +30,5 @@ bower_components
 node_modules
 *.DS_Store
 
-config
+# Config file
+config.json
