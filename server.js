@@ -71,6 +71,12 @@ app.get('/', function (req, res) {
     });
 });
 
+// Logout is a route rather than a button
+app.get('/logout', function (req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 app.get('/gallery/new',
   passport.authenticate('basic', {session: false}),
   function (req, res) {
