@@ -9,6 +9,7 @@ var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basi
 var db = require('./models');
 var PORT = 3000;
 var Photo = db.Photo;
+var CONFIG = require('config.json');
 
 var app = express();
 
@@ -23,7 +24,7 @@ app.use(express.static('public'));
 
 passport.use(new BasicStrategy(
   function(username, password, done) {
-    if ( !(username === user.username && password === user.password) ) {
+    if ( !(username === CONFIG[0].username && password === CONFIG[0].password) ) {
       return done(null, false);
     }
     return done(null, user);
@@ -73,30 +74,34 @@ app.get('/gallery/new', function (req, res) {
   res.render('new-form', {});
 });
 
-app.get('/gallery/:id', function (req, res) {
-  Photo.find({where: {id: req.params.id}})
-    .then(function (result) {
-      var locals = {
-        id:          result.id,
-        author:      result.author,
-        link:        result.link,
-        description: result.description
-      };
-      res.render('gallery', locals);
-    });
+app.get('/gallery/:id',
+  passport.authenticate('basic', {session: false}),
+  function (req, res) {
+    Photo.find({where: {id: req.params.id}})
+      .then(function (result) {
+        var locals = {
+          id:          result.id,
+          author:      result.author,
+          link:        result.link,
+          description: result.description
+        };
+        res.render('gallery', locals);
+      });
 });
 
-app.get('/gallery/:id/edit', function (req, res) {
-  Photo.find({where: {id: req.params.id}})
-    .then(function (result) {
-      var locals = {
-        id:          result.id,
-        author:      result.author,
-        link:        result.link,
-        description: result.description
-      };
-      res.render('put-form', locals);
-    });
+app.get('/gallery/:id/edit',
+  passport.authenticate('basic', {session: false}),
+  function (req, res) {
+    Photo.find({where: {id: req.params.id}})
+      .then(function (result) {
+        var locals = {
+          id:          result.id,
+          author:      result.author,
+          link:        result.link,
+          description: result.description
+        };
+        res.render('put-form', locals);
+      });
 });
 
 app.post('/gallery', function (req, res) {
