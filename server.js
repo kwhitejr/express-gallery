@@ -4,6 +4,9 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basic Authentication Strategy
+var LocalStrategy = require('passport-local').Strategy;
+var session = require('express-session');
+
 
 
 var db = require('./models');
@@ -15,6 +18,7 @@ var app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride('_method'));
+app.use(session(CONFIG.SESSION));
 
 app.set('view engine', 'jade');
 app.set('views', 'views');
@@ -22,15 +26,25 @@ app.set('views', 'views');
 // tells express where all the public files are located
 app.use(express.static('public'));
 
-passport.use(new BasicStrategy(
-  function(username, password, done) {
-    if ( !(username === user.username && password === user.password) ) {
+passport.use(new LocalStrategy(
+  function (username, password, done) {
+    var isAuthenticated = authenticate(username, password);
+    if ( !isAuthenticated ) {
       return done(null, false);
     }
     // the thing inside the done will be assigned to req.user
     return done(null, user);
   }
 ));
+
+// Global Functions
+function isAuthenticated (req, res, next) {
+  console.log(req.user);
+  if (! req.isAuthenticated()) {
+    return res.redirect('/login');
+  }
+  return next();
+}
 
 app.put('/gallery/:id', function (req, res) {
   console.log(req.body);
@@ -77,8 +91,19 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
+app.get('/login', function (req, res) {
+  res.render('login');
+});
+
+app.post('/login', function (req, res) {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login'
+  });
+});
+
 app.get('/gallery/new',
-  passport.authenticate('basic', {session: false}),
+  isAuthenticated,
   function (req, res) {
     res.render('new-form', {});
   }
@@ -98,7 +123,7 @@ app.get('/gallery/:id', function (req, res) {
 });
 
 app.get('/gallery/:id/edit',
-  passport.authenticate('basic', {session: false}),
+  isAuthenticated,
   function (req, res) {
     Photo.find({where: {id: req.params.id}})
       .then(function (result) {
