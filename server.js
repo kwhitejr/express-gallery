@@ -2,6 +2,9 @@ var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basic Authentication Strategy
+
 
 var db = require('./models');
 var PORT = 3000;
@@ -17,6 +20,15 @@ app.set('views', 'views');
 
 // tells express where all the public files are located
 app.use(express.static('public'));
+
+passport.use(new BasicStrategy(
+  function(username, password, done) {
+    if ( !(username === user.username && password === user.password) ) {
+      return done(null, false);
+    }
+    return done(null, user);
+  }
+));
 
 app.put('/gallery/:id', function (req, res) {
   console.log(req.body);
