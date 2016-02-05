@@ -6,8 +6,6 @@ head
 body
   h1 Login, My Friend
   form(method="POST" action="/login")
-    p username:
     input(type="text" name="username" placeholder="username...")
-    p password:
-    input(type="text" name="password")
+    input(type="password" name="password" placeholder="password...")
     input(type="submit" value="Login")
