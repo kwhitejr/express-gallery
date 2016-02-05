@@ -45,8 +45,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0; }
 
+html {
+  font-size: 16px; }
+
 body {
   background-color: white; }
 
 h1 {
-  color: blue; }
+  color: blue;
+  font-size: 2rem; }

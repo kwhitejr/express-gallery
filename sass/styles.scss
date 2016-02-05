@@ -20,10 +20,15 @@ $medium: "only screen and (min-width:600px)";
 $large: "only screen and (min-width:900px)";
 
 // GENERAL STYLES
+html {
+  font-size: 16px;
+}
+
 body {
-  background-color: white
+  background-color: white;
 }
 
 h1 {
-  color: blue
+  color: blue;
+  font-size: 2rem;
 }

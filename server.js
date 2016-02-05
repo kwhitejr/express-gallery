@@ -3,11 +3,9 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var passport = require('passport');
-var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basic Authentication Strategy
+// var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basic Authentication Strategy
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
-
-
 
 var db = require('./models');
 var Photo = db.Photo;
@@ -16,16 +14,16 @@ var user = CONFIG.USER;
 
 var app = express();
 
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(methodOverride('_method'));
-app.use(session(CONFIG.SESSION));
-
 app.set('view engine', 'jade');
 app.set('views', 'views');
 
 // tells express where all the public files are located
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(methodOverride('_method'));
+app.use(session(CONFIG.SESSION));
 
+// Authentication Strategy
 passport.use(new LocalStrategy(
   function (username, password, done) {
     var isAuthenticated = authenticate(username, password);
@@ -33,17 +31,51 @@ passport.use(new LocalStrategy(
       return done(null, false);
     }
     // the thing inside the done will be assigned to req.user
+    // first parameter is error
     return done(null, user);
   }
 ));
 
+/****** I don't know what this does **********/
+passport.serializeUser(function (user, done) {
+  return done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+  return done(null, user);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+/*******************************************/
+
+
+
+
 // Global Functions
 function isAuthenticated (req, res, next) {
-  console.log(req.user);
   if (! req.isAuthenticated()) {
     return res.redirect('/login');
   }
   return next();
+}
+
+function authenticate(username, password) {
+  var USER = CONFIG.USER;
+  var USERNAME = USER.username;
+  var PASSWORD = USER.password;
+  return (
+    username === USERNAME &&
+    password === PASSWORD
+  );
+}
+
+function loggedIn (req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
 }
 
 app.put('/gallery/:id', function (req, res) {
@@ -81,7 +113,7 @@ app.delete('/gallery/:id', function (req, res) {
 app.get('/', function (req, res) {
   Photo.findAll()
     .then(function (results) {
-      res.render('index', {photos: results});
+      res.render('index', {photos: results, isAuthenticated: req.isAuthenticated()});
     });
 });
 
@@ -95,12 +127,12 @@ app.get('/login', function (req, res) {
   res.render('login');
 });
 
-app.post('/login', function (req, res) {
+app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login'
-  });
-});
+  })
+);
 
 app.get('/gallery/new',
   isAuthenticated,
