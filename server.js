@@ -10,7 +10,7 @@ var session = require('express-session');
 var db = require('./models');
 var Photo = db.Photo;
 var CONFIG = require('./config.json');
-var user = CONFIG.USER;
+var User = db.User;
 
 var app = express();
 
@@ -26,13 +26,22 @@ app.use(session(CONFIG.SESSION));
 // Authentication Strategy
 passport.use(new LocalStrategy(
   function (username, password, done) {
-    var isAuthenticated = authenticate(username, password);
-    if ( !isAuthenticated ) {
-      return done(null, false);
-    }
-    // the thing inside the done will be assigned to req.user
-    // first parameter is error
-    return done(null, user);
+    User.find({
+      where: {
+        username: username,
+        password: password
+      }
+    }).
+    // result of the find is a user
+    then(function (user) {
+      // var isAuthenticated = authenticate(username, password);
+      if ( !user ) {
+        return done(null, false);
+      }
+      // the thing inside the done will be assigned to req.user
+      // first parameter is error
+      return done(null, user);
+    });
   }
 ));
 
@@ -113,7 +122,10 @@ app.delete('/gallery/:id', function (req, res) {
 app.get('/', function (req, res) {
   Photo.findAll()
     .then(function (results) {
-      res.render('index', {photos: results, isAuthenticated: req.isAuthenticated()});
+      res.render('index', {
+        photos: results,
+        isAuthenticated: req.isAuthenticated()
+      });
     });
 });
 
