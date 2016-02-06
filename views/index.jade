@@ -1,4 +1,4 @@
-extends ./layout/layout.jade
+extends layout.jade
 
 block title
   title Index
@@ -11,7 +11,8 @@ block content
   div(class="container")
     ol
       each photo in photos
-        li
-          p #{photo.author}
-          img(src= '#{photo.link}')
-          p #{photo.description}
+        div(class="item")
+          li
+            p #{photo.author}
+            img(src= '#{photo.link}')
+            p #{photo.description}

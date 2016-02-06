@@ -63,7 +63,7 @@ app.use(passport.session());
 // Outsourced routing functions
 app.use('/gallery', require('./routers/galleryRouter'));
 
-
+// Index
 app.get('/', function (req, res) {
   Photo.findAll()
     .then(function (results) {
@@ -74,22 +74,23 @@ app.get('/', function (req, res) {
     });
 });
 
+// Login
+app.route('/login')
+  .get(function (req, res) {
+    res.render('login');
+  })
+  .post(
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/login'
+    })
+);
+
 // Logout is a route rather than a button
 app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
 });
-
-app.get('/login', function (req, res) {
-  res.render('login');
-});
-
-app.post('/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login'
-  })
-);
 
 db.sequelize
   .sync()

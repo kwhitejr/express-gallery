@@ -1,13 +1,13 @@
-extends ./layout/layout.jade
+extends layout.jade
 
 block title
   title Put
 
 block content
   h1 Put Request
-  p= description
-  img(src= link)
   p by #{author}
+  img(src= link)
+  p= description
   h2 Edit?
   form(method="POST", action="/gallery/#{id}?_method=PUT")
     input(type="text", name="author", value=author placeholder="edit author name")
