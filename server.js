@@ -3,7 +3,6 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var passport = require('passport');
-// var BasicStrategy = require('passport-http').BasicStrategy;  // Want to use Basic Authentication Strategy
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 var isAuthenticated = require('./middleware/isAuthenticated');
