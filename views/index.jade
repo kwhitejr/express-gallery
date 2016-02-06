@@ -4,13 +4,14 @@ block title
   title Index
 
 block content
-  h1 Gallery of Great Photos
-  form(method="GET", action="/gallery/new")
-    input(type="submit", name="addNew", value="Add New Photo")
-  br
-  ol
-    each photo in photos
-      li #{photo.description}
-        ul
+  div
+    h1 Gallery of Great Photos
+    form(method="GET", action="/gallery/new")
+      input(type="submit", name="addNew", value="Add New Photo")
+  div(class="container")
+    ol
+      each photo in photos
+        li
+          p #{photo.author}
           img(src= '#{photo.link}')
-          p by #{photo.author}
+          p #{photo.description}

@@ -7,9 +7,11 @@ html(lang="en")
       title Default title
   body
     if isAuthenticated
-      form(method="GET" action="/logout")
-        input(type="submit" value="Logout")
+      div
+        form(method="GET" action="/logout")
+          input(type="submit" value="Logout")
     else
-      form(method="GET" action="/login")
-        input(type="submit" value="Login")
+      div
+        form(method="GET" action="/login")
+          input(type="submit" value="Login")
     block content
