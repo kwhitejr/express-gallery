@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var isAuthenticated = require('../middleware/isAuthenticated');
 
 var db = require('../models');
 var Photo = db.Photo;
@@ -11,6 +12,14 @@ router.route('/')
         res.redirect('/gallery/'+result.id);
       });
   });
+
+router.route('/new')
+  .get(
+    isAuthenticated,
+    function (req, res) {
+      res.render('new-form', {});
+    }
+  );
 
 router.route('/:id')
   .get(function (req, res) {
@@ -53,6 +62,22 @@ router.route('/:id')
     .then(function () {
         res.redirect('/');
       });
+  });
+
+router.route('/:id/edit')
+  .get(
+    isAuthenticated,
+    function (req, res) {
+      Photo.find({where: {id: req.params.id}})
+        .then(function (result) {
+          var locals = {
+            id:          result.id,
+            author:      result.author,
+            link:        result.link,
+            description: result.description
+          };
+          res.render('put-form', locals);
+        });
   });
 
 module.exports = router;
