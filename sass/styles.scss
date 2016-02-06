@@ -27,9 +27,22 @@ html {
 body {
   background-color: #E8E8E8;
   font-family: "Arial Black";
+  width: 100%;
 }
 
 h1 {
   color: #585858;
   font-size: 2rem;
 }
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item {
+  max-width: 50%;
+  background-color: red;
+}
+
