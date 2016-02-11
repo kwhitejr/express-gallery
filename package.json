@@ -19,6 +19,7 @@
   "homepage": "https://github.com/kwhitejr/express-gallery#readme",
   "dependencies": {
     "body-parser": "^1.14.2",
+    "connect-redis": "^3.0.2",
     "express": "^4.13.3",
     "express-session": "^1.13.0",
     "express-sessions": "^1.0.5",
@@ -35,6 +36,7 @@
     "faker": "^3.0.1",
     "gulp": "^3.9.0",
     "gulp-connect": "^2.3.1",
-    "gulp-sass": "^2.1.1"
+    "gulp-sass": "^2.1.1",
+    "morgan": "^1.6.1"
   }
 }

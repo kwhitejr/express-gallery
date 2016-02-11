@@ -37,12 +37,14 @@ h1 {
 
 .container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  // align-items: center; // This defines the default behaviour for how flex items are laid out along the cross axis on the current line. Here, items are centered in the cross-axis
+  // justify-content: center; // This defines the alignment along the main axis. Here, items centered along the line
+  background-color: yellow;
 }
 
 .item {
   max-width: 50%;
   background-color: red;
+  margin: 20px;
 }
 

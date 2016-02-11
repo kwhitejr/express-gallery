@@ -6,13 +6,13 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
 var isAuthenticated = require('./middleware/isAuthenticated');
-
+var RedisStore = require('connect-redis')(session);
+var morgan = require('morgan');
 
 var db = require('./models');
 var Photo = db.Photo;
 var CONFIG = require('./config.json');
 var User = db.User;
-
 
 var app = express();
 
@@ -23,11 +23,24 @@ app.set('views', 'views');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride('_method'));
-app.use(session(CONFIG.SESSION));
+app.use(session({
+  store: new RedisStore(
+    {
+      host: '127.0.0.1',
+      port: '6379'
+    }
+  ),
+  secret: CONFIG.SESSION.secret
+  })
+);
+app.use(morgan('dev'));
 
 // Authentication Strategy
 passport.use(new LocalStrategy(
-  function (username, password, done) {
+  {
+    passReqToCallback: true
+  },
+  function (req, username, password, done) {
     User.find({
       where: {
         username: username,
@@ -59,6 +72,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 /*******************************************/
 
+//creates a default value for res.locals
+app.use(function (req, res, next) {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  next();
+});
+
 // Outsourced routing functions
 app.use('/gallery', require('./routers/galleryRouter'));
 
@@ -68,7 +87,7 @@ app.get('/', function (req, res) {
     .then(function (results) {
       res.render('index', {
         photos: results,
-        isAuthenticated: req.isAuthenticated()
+        // isAuthenticated: req.isAuthenticated()
       });
     });
 });
@@ -89,6 +108,20 @@ app.route('/login')
 app.get('/logout', function (req, res) {
   req.logout();
   res.redirect('/');
+});
+
+// Catch-all route-undefined handler
+app.use(function (req, res, next) {
+  res.status(404);
+  return res.send('What are you doing here?');
+});
+
+// Default catch-all middleware
+app.use(function (err, req, res, next) {
+  if (err) {
+    res.status(500);
+  }
+  return res.send('What are you doing here?');
 });
 
 db.sequelize
