@@ -35,16 +35,22 @@ h1 {
   font-size: 2rem;
 }
 
-.container {
+.containerPhoto {
   display: flex;
-  // align-items: center; // This defines the default behaviour for how flex items are laid out along the cross axis on the current line. Here, items are centered in the cross-axis
+  align-items: center; // This defines the default behaviour for how flex items are laid out along the cross axis on the current line. Here, items are centered in the cross-axis
   // justify-content: center; // This defines the alignment along the main axis. Here, items centered along the line
+  flex-direction: column-reverse;
   background-color: yellow;
 }
 
-.item {
-  max-width: 50%;
+.itemPhoto {
+  max-width: 600px;
+  min-width: 360px
   background-color: red;
   margin: 20px;
 }
 
+img {
+  max-width: 100%;
+  max-height: 100%;
+}

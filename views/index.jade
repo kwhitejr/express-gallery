@@ -8,11 +8,9 @@ block content
     h1 Gallery of Great Photos
     form(method="GET", action="/gallery/new")
       input(type="submit", name="addNew", value="Add New Photo")
-  div(class="container")
-    ol
-      each photo in photos
-        div(class="item")
-          li
-            p #{photo.author}
-            img(src= '#{photo.link}')
-            p #{photo.description}
+  div(class="containerPhoto")
+    each photo in photos
+      div(class="itemPhoto")
+        p #{photo.author}
+        img(src= '#{photo.link}')
+        p #{photo.description}
